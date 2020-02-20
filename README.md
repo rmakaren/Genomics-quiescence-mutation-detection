@@ -7,9 +7,13 @@ This project contains custom developed R scripts to detect rare mutations (up to
 The scripts have to be run in the following order
 
 functions.R
+
 Variants_distribution_4cultures.R
+
 Variants_distribution_6cultures.R
+
 All_together.R
+
 lolliplot_graph.R
 
 # functions.R 
