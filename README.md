@@ -1,6 +1,6 @@
-# Rare mutation detection in S.pombe quiescence population 
+# Rare mutation detection from S.pombe quiescence population 
 
-This project contains several R scripts to analyse mutations from S.pombe quiescence populations. Scripts also includes small statistical analysis as number of the mutations per gene, mutations annotation etc. 
+This project contains custom developed R scripts to detect rare mutations (up to 0.1% of the population) from S.pombe quiescence populations. Briefly, the data represents targeted resequencing experiment (Illumina) of the 9 genes of S/MAPK pathways. For more details, please follow to Makarenko et al. (2020). If you are using this code, please cite this paper. Scripts also include some minor statistical analysis as number of the mutations per gene and mutations annotation and visualisation. 
 
 # Usage
 
@@ -14,7 +14,7 @@ lolliplot_graph.R
 
 # functions.R 
 
-This is a separate script for the custom-developed functions for mutations  preprocessing, filtering, annotation and visualisation technics used in this analysis
+This script uploads the libraries and the custom-developed functions for mutations  preprocessing, filtering, annotation and visualisation technics used in this analysis
 
 # Variants_distribution_4cultures.R 
 
@@ -36,7 +36,6 @@ Finally the script plots the distribution of the frequencies of the final varian
 for the SNPs and the indels and saves the resulting plots into .tiff files
 
 # Variants_distribution_6cultures.R 
-
 
 This script is almost as same as Variants_distribution_4cultures.R, but in addition it maintains
 only the variants that were found in common between sequencing dublicates. This script also 
