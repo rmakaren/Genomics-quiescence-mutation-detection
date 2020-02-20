@@ -7,11 +7,8 @@ library(dplyr)
 require(scales)
 library(data.table)
 library(stringr)
-#install.packages("tidyverse")
 library(tidyverse)
-#install.packages("gsubfn")
 library(gsubfn)
-#install.packages("Cairo")
 library(Cairo) #package to save the data in different file format (.pdf)
 require(graphics)
 
@@ -49,7 +46,8 @@ time_in_quiescence <- function(x) {
 #functions for filtering variants from NGS and other data analysis
 #############################################################################
 
-#subsetting based on the base quality of the alternative variant comparint to the reference. The maximum difference is 7%
+#subsetting based on the base quality of the alternative variant in comparison to the reference. 
+# The maximum difference is 7%
 base_quality <- function(x){
   x <- subset(x, ((abs(x$Qual1 - x$Qual2) < 0.07*((x$Qual1 + x$Qual2/2))) == TRUE))
   return(x)
@@ -102,7 +100,7 @@ range_and_mean <- function(x){
 }
 
 ######################################
-#functions annotation the variants
+#functions to annotate the variants
 ######################################
 
 #this function annotate the 9 genes from targeted resequencing data (sgf73, win1, wis1, sty1, mkh1, pek1, pmk1, sgf73, tif452)
@@ -202,6 +200,7 @@ mutation_annotation_range <- function(x){
                                                                           ifelse((x$mutation_type == "Deletion"  & nchar(x$VarAllele) > 3 & x$strain_direction != "+" & x$range == "±0%"), paste0(x$gene, rep ("-"), x$cDNA, rep ("-"), as.character(nchar(x$VarAllele)-1), rep ("bp"), rep (" "),   x$VarFreq*100, rep("%")),
                                                                                  ifelse((x$mutation_type == "Deletion"  & nchar(x$VarAllele) > 3 & x$strain_direction != "-" & x$range == "±0%"), paste0(x$gene, rep ("-"), x$cDNA, rep ("-"), as.character(nchar(x$VarAllele)-1), rep ("bp"), rep (" "),   x$VarFreq*100, rep("%")),
                                                                                         paste0(x$gene, rep ("-"), x$cDNA, rep (" "), "CPX", rep (" "),  x$VarFreq*100, rep("%"))))))))))))))
+  x$annotation <- ifelse((x$strain_direction == "-"), gsubfn(".", list("C" = "G", "G" = "C", "A" = "T", "T" = "A"), x$annotation), gsubfn(".", list("C" = "C", "G" = "G", "A" = "A", "T" = "T"), x$annotation))
   return(x)
 }
 ##############################
@@ -368,7 +367,7 @@ mutation <- function(x) {
   return(x)
 }
 
-#functionS to calculate the coverage of the sequencing data: avarege, minimum and maximum
+#functions to calculate the coverage of the sequencing data: avarege, minimum and maximum
 average <- function(x) {
   sum(x$Reads1 + x$Reads2)/length(x$Reads1)
 }
@@ -459,7 +458,7 @@ addding_row_to_df <- function(x){
 }
 
 ####################
-#plotting the distribution of the Variat frequences
+#plotting the distribution of the variant frequences
 
 plot_histogram <- function(x) ggplot(data = x, aes(VarFreq)) + 
   list(
@@ -482,21 +481,22 @@ output_tiff <- function(x) {
 }
 
 #------------------------------
-#test the code
-addding_row_to_df <- function(x){
-  tmp<- rep(NA, ncol(x))
-  x <- rbind(x, tmp)
+
+# calculation and annotating the rest of the mutation frequency
+rest_of_population <- function (x){
+  tmp <- rep(NA, ncol(x)) #creating a newempty row 
+  x <- rbind(x, tmp) #binding two rows
+  test_test<- (1 -sum(x$VarFreq, na.rm = TRUE))
+  x$VarFreq[ nrow(x) ] <- test_test
+  x$Sample[ nrow(x) ] <- x$Sample[1]
+  x$annotation[ nrow(x) ] <- paste0("rest of the population", "=", (test_test*100), "%")
+  x$time_in_quiescence[ nrow(x) ] <- x$time_in_quiescence[1]
+  x$gene_order[ nrow(x) ] <-99
   return(x)
 }
 
-
-# rest of the population function
-rest_pop <- function (x){
-  test_test<- (1 -sum(x$VarFreq, na.rm = TRUE))
-  return(test_test)
-}
-
-rest_of_population <- function(x){
+#calculation and annotating the total mutation frequency
+total_mutations <- function(x){
   tmp <- rep(NA, ncol(x)) #creating a newempty row 
   x <- rbind(x, tmp) #binding two rows
   tmp2 <- sum(x$VarFreq, na.rm = TRUE)
@@ -507,6 +507,8 @@ rest_of_population <- function(x){
   x$gene_order[ nrow(x) ] <-99
   return(x)
 }
+
+
 
 #################
 #Specific function to create the Complex mutations
@@ -575,21 +577,3 @@ remove_hot_spots <- function(x){
   rownames(x) <- NULL
   return(x)
 }
-
-
-
-##--------------------------------------------------
-##useful pieces of codes 
-##--------------------------------------------------
-
-lapply(files, function(x) {
-  t <- read.table(x, header=T, sep ="\t", na.strings=c("","NA")) # load file
-  # apply function
-  out <- function(t)
-    # write to file
-    write.table(out, "path/to/output", sep="\t", quote=F, row.names=F, col.names=T)
-})
-
-##--------------------------------------------------
-##everything below from here is for testing the code
-##--------------------------------------------------
