@@ -1,6 +1,11 @@
 # Rare mutation detection from S.pombe quiescence population 
 
-This project contains custom developed R scripts to detect rare mutations (up to 0.1% of the population) from S.pombe quiescence populations. Briefly, the data represents targeted resequencing experiment (Illumina) of the 9 genes of S/MAPK pathways. For more details, please follow to Makarenko et al. (2020). If you are using this code, please cite this paper. Scripts also include some minor statistical analysis as number of the mutations per gene and mutations annotation and visualisation. 
+# Background
+Precise detection of mutations in Genomics data is a challenging process. Up-to-date sequencing platforms generate the data
+with various level of technical errors (Edward J Fox et al 2014). Moreover, sequencing errors are superimposed on the errors obtained during sample preparation or due to imperfect experimental design. Exact and accurate somatic mutations calling is necessary for diagnostic and preventing tumorigenesis at an early stage; the identification of the rare virus population is important to counter infection outbreak. Therefore the development of the sufficient algorithm to reduce the noise in the sequencing data is crucial. 
+
+# Summary
+This project contains custom-developed R scripts to detect rare mutations (up to 0.1% of the population) from S.pombe quiescence populations. Briefly, the data represents a targeted resequencing experiment (Illumina) of the 9 genes of S/MAPK pathways. For more details, please follow to Makarenko et al. (2020). If you are using this code, please cite this paper. Scripts also include some minor statistical analysis as a number of the mutations per gene and mutations annotation and visualisation. 
 
 # Usage
 
