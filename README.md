@@ -59,3 +59,4 @@ the yellow one - missense SNP mutation,
 the lightcoral - insertion,
 the violet - deletion,
 The resulting plots are saved in separate .pdf files
+
